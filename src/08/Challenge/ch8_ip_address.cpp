@@ -15,11 +15,43 @@
 // Arguments:
 //           ip: The string to analyze with a potential ip address.
 // Returns: A boolean value. True for valid ip addresses, false otherwise.
-bool is_valid_ip(std::string ip){
+bool is_valid_ip(std::string ip)
+{
+    std::string fourChars[4];
 
-    // Write your code here
+    int i = 0;
+    for(auto& element : ip)
+    {
+        if(element != '.')
+            fourChars[i] += element;
+        else
+        {
+            i++;
+        }  
+    }
+    if(i != 3)
+    {
+        return false;
+    }
 
-    return false;
+    int num[4] = {-1,-1,-1,-1};
+
+    for(int i = 0; i < 4; i++)
+    {
+        for(auto& element : fourChars[i])
+        {
+            if(!isdigit(element))
+            {
+                return false;
+            }
+        }
+        num[i] = stoi(fourChars[i]);
+        if(num[i] < 0 || num[i] > 255)
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 // Main function

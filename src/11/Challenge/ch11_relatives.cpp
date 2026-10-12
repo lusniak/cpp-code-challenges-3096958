@@ -12,23 +12,73 @@
 #include <vector>
 #include <sstream>
 
+struct Person{
+    std::string name;
+    std::string surname;
+};
+
 // Finding Relatives, main()
 // Summary: This application displays the first pair of possible relatives from a list of names in a CSV file.
-int main(){
+int main()
+{
+    std::vector<Person> people;
+    Person person;
     std::fstream file ("names.csv", std::ios::in);
+    std::string text;
     // Read the CSV file.
-    if(file.is_open()){
-
+    if(file.is_open())
+    {
+        std::getline(file,text);
         // Write your code here
+        std::string part;
+
+        for (char c : text)
+        {
+            if (c == ' ')
+            {
+                person.name = part;
+                part.clear();
+            }
+            else if(c == ',')
+            {
+                person.surname = part;
+                part.clear();
+                people.push_back(person);
+            }
+            else
+            {
+                part += c;
+            }
+        }
+
+
+        // ostatni fragment
+        person.surname = part;
+        part.clear();
+        people.push_back(person);
     
         file.close();
     }
-    else{
+    else
+    {
         std::cout << "Something went wrong\n" << std::flush;
         return 1;
     }
 
-    // Write your code here
+    for(auto& element : people)
+    {
+        for(auto& elem : people)
+        {
+            if(element.name != elem.name)
+            {     
+                if(element.surname == elem.surname)
+                {
+                    std::cout << element.name << " " << element.surname << " is relative to " << elem.name << " " << elem.surname << std::flush;
+                    return 0;
+                }
+            }
+        }
+    }
 
     std::cout << "No relatives found.\n\n" << std::flush;    
     return 0;

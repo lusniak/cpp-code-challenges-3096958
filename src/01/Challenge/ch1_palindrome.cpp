@@ -12,11 +12,21 @@
 // Arguments:
 //           str: The string to analyze.
 // Returns: A boolean value. True for palindromes, false otherwise.
-bool is_palindrome(std::string str){
-
+bool is_palindrome(std::string str)
+{
+    for (char& c : str)
+        c = std::tolower(c);
+    int i,j;
+    for(i = 0, j = str.size() - 1; j > i; i++, j--)
+    {
+        if(str[i] != str[j])
+        {
+            return false;
+        }
+    }
     // Write your code here
 
-    return false;
+    return true;
 }
 
 // Main function

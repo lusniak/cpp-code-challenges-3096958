@@ -17,23 +17,62 @@
 // Arguments:
 //           filename: A string with the name of the file to open.
 // Returns: An integer enconding: 1 for valid JSON files, 0 for invalid, and -1 on failure to open file. 
-int is_valid_JSON(std::string filename){
+int is_valid_JSON(std::string filename)
+{
     std::string line;
-    bool quotes = false; 
+    bool quotes = false;
+    int braces = 0;
+    int brackets = 0;
+    bool inString = false;
 
     std::fstream file (filename, std::ios::in);
-    if(file.is_open()){
- 
-        // Write your code here
+    if(file.is_open())
+    {
+        while(std::getline(file, line))
+        {
+            for (char c : line)
+            {
+                if (c == '"')
+                {
+                    inString = !inString;
+                }
+                else if (!inString)
+                {
+                    if (c == '{')
+                    {
+                        braces++;
+                    }
+                    else if (c == '}')
+                    {
+                        braces--;
+                    }
+                    else if (c == '[')
+                    {
+                        brackets++;
+                    }
+                    else if (c == ']')
+                    {
+                        brackets--;
+                    }
 
+                    if (braces < 0 || brackets < 0)
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
         file.close();
+
+        return ((braces == 0) && (brackets == 0) && (!inString));
     }
     else
         return -1;
 }
 
 // JSON File Validation, main()
-int main(){
+int main()
+{
     int x = is_valid_JSON("jason.json");
 
     if(x == 1)

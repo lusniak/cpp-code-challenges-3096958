@@ -19,9 +19,130 @@
 #define N 10
 #define M 10
 
+struct Neighbor{
+    int row;
+    int col;
+};
+
+Neighbor neighbor[8];
+
+int howManyNeighbors(char game[][M], int row, int col)
+{
+    int retVal = 0;
+
+    //up
+    int rowtocheck = row - 1;
+    int coltocheck = col;
+    if(rowtocheck == 1)
+    {
+        rowtocheck = 10;
+    }
+    if(game[rowtocheck][coltocheck] == 'X')
+    {
+        retVal++;
+    }
+    //up left
+    rowtocheck = row - 1;
+    coltocheck = col - 1;
+    if(rowtocheck == 1)
+    {
+        rowtocheck = 10;
+    }
+    if(coltocheck == 1)
+    {
+        coltocheck = 10;
+    }
+    if(game[rowtocheck][coltocheck] == 'X')
+    {
+        retVal++;
+    }
+    //up right
+    rowtocheck = row - 1;
+    coltocheck = col + 1;
+    if(rowtocheck == 1)
+    {
+        rowtocheck = 10;
+    }
+    if(coltocheck == 10)
+    {
+        coltocheck = 1;
+    }
+    if(game[rowtocheck][coltocheck] == 'X')
+    {
+        retVal++;
+    }
+    //left
+    rowtocheck = row;
+    coltocheck = col - 1;
+    if(coltocheck == 1)
+    {
+        coltocheck = 10;
+    }
+    if(game[rowtocheck][coltocheck] == 'X')
+    {
+        retVal++;
+    }
+    //right
+    rowtocheck = row;
+    coltocheck = col + 1;
+    if(coltocheck == 10)
+    {
+        coltocheck = 1;
+    }
+    if(game[rowtocheck][coltocheck] == 'X')
+    {
+        retVal++;
+    }
+    //down left
+    rowtocheck = row + 1;
+    coltocheck = col - 1;
+    if(rowtocheck == 10)
+    {
+        rowtocheck = 1;
+    }
+    if(coltocheck == 1)
+    {
+        coltocheck = 10;
+    }
+    if(game[rowtocheck][coltocheck] == 'X')
+    {
+        retVal++;
+    }
+    //down
+    rowtocheck = row + 1;
+    coltocheck = col;
+    if(rowtocheck == 10)
+    {
+        rowtocheck = 1;
+    }
+    if(game[rowtocheck][coltocheck] == 'X')
+    {
+        retVal++;
+    }
+    //down right
+    rowtocheck = row + 1;
+    coltocheck = col + 1;
+    if(rowtocheck == 10)
+    {
+        rowtocheck = 1;
+    }
+    if(coltocheck == 10)
+    {
+        coltocheck = 1;
+    }
+    if(game[rowtocheck][coltocheck] == 'X')
+    {
+        retVal++;
+    }
+
+    return retVal;
+}
+
+
 // Conway's Game of Life, main()
 // Summary: This application is a simulation of Conway's game of life.
-int main(){    
+int main()
+{    
     // The game, initialized with a glider and a blinker.
     char game[N][M];  
     std::memset(game,'-',N*M); // Initialize game with dashes.
@@ -42,14 +163,50 @@ int main(){
     std::string go_on;
     do{
         std::cout << "Generation #" << generation++ << "\n";
-        for (auto &str : game){
+        for (auto &str : game)
+        {
             for (auto &ch : str)
+            {
                 std::cout << " " << ch;
+            }
             std::cout << "\n";
         }
         std::cout << "\n";
 
-        // Write your code here
+        for(int row = 1; row <= N; row++)
+        {
+            for(int col = 1; col <= M; col++)
+            {
+                if(game[row][col] == 'X') //live cell
+                {
+                    int neighbors = howManyNeighbors(game, row, col);
+                    if(neighbors < 2)
+                    {
+                        //death
+                        game[row][col] = '-';
+                    }
+                    else if(neighbors <= 3)
+                    {
+                        //lives, do nothing
+                    }
+                    else if(neighbors > 3)
+                    {
+                        //death
+                        game[row][col] = '-';
+                    }
+                }
+                else //dead cell
+                {
+                    int neighbors = howManyNeighbors(game, row, col);
+                    if(neighbors == 3)
+                    {
+                        //born
+                        game[row][col] = 'X';
+                    }
+                }
+            }
+        }
+
         
         std::cout << "Press Enter for the next generation, or type \"Exit\": " << std::flush;
         std::getline(std::cin,go_on);

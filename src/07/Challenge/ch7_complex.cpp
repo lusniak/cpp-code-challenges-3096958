@@ -18,7 +18,8 @@
 #include "complex_num.h"
 
 // Main function
-int main(){
+int main()
+{
     // Create two complex numbers z and w
     complex_num z(10.0,5.0); 
     complex_num w(-2.0);
